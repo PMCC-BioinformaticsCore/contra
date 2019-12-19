@@ -17,27 +17,26 @@
 #    You should have received a copy of the GNU General Public License
 #    along with CONTRA.  If not, see <http://www.gnu.org/licenses/>.
 #
-# 
-#-----------------------------------------------------------------------#
+#
+# -----------------------------------------------------------------------#
 # Last Updated : 05 October 2011 16:43PM
 
 
 import subprocess, shlex
 
+
 def get_genome(srcFile, genomeOut):
-	genome = open(genomeOut, "w")
+    genome = open(genomeOut, "w")
 
-	args = shlex.split("samtools view -H %s" %(srcFile))
-	raw_header = subprocess.Popen(args, stdout = subprocess.PIPE).communicate()[0]
-	headers = raw_header.split("\n")
+    args = shlex.split("samtools view -H {}".format(srcFile))
+    raw_header = subprocess.Popen(args, stdout=subprocess.PIPE).communicate()[0]
+    headers = str(raw_header).split("\n")
 
-	for header in headers:
-		header = header.split("\t")
-		if header[0][1:] != "SQ":
-			continue
+    for header in headers:
+        header = header.split("\t")
+        if header[0][1:] != "SQ":
+            continue
 
-		genome.write(header[1].strip("SN:") + "\t" + header[2].strip("LN:") + "\n")
+        genome.write(header[1].strip("SN:") + "\t" + header[2].strip("LN:") + "\n")
 
-	genome.close()
-
-		
+    genome.close()
