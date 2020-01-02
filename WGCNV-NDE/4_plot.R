@@ -4,7 +4,7 @@
 #g.dat=read.delim("1003-Tumour_wgSummary.txt",as.is=T)
 
 x=commandArgs()
-args=x[match("--args",x)+1:length(x)] 
+args=x[match("--args",x)+1:length(x)]
 
 #ex.f="14K0038_exSummary.txt"
 #g.f="14K0038_wgSummary.txt"

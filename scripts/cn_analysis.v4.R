@@ -17,7 +17,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with CONTRA.  If not, see <http://www.gnu.org/licenses/>.
 #
-# 
+#
 #-----------------------------------------------------------------------#
 # Last Updated : 30 Sept 2011 17:00PM
 
@@ -57,7 +57,7 @@ cn.boundary= read.delim(boundariesFile,as.is=F, header=F)
 cn.average.aboveTs = cn.average[cn.average$V3>min.bases,]
 cn.average.list = as.matrix(cn.average.aboveTs$V4)
 
-# Get the mean and sd for each bins 
+# Get the mean and sd for each bins
 cn.average.mean = c()
 cn.average.sd = c()
 cn.average.log= c()
@@ -87,7 +87,7 @@ if (plotoption == "True"){
 	dev.off()
 }
 
-# Put the data's details into matrices 
+# Put the data's details into matrices
 ids 		= as.matrix(cn.average.aboveTs$V1)
 exons 		= as.matrix(cn.average.aboveTs$V6)
 exons.pos 	= as.matrix(cn.average.aboveTs$V5)
@@ -162,7 +162,7 @@ fit.sd.fn <- function(x, fit.a, fit.b){
 	result = 2 ^ (fit.mean.fn(x, fit.a, fit.b))
 	return (result)
 }
-	
+
 # Get the P Values, called the gain/loss
 # with average and sd from each bins
 pVal.list = c()
@@ -176,7 +176,7 @@ for (i in 1:nrow(cn.average.list)){
 	logcov	 = logcov.mean[i]
 	exon.bin = Bin[i]
 
-	if (length(logratios.sd) > 1){	
+	if (length(logratios.sd) > 1){
 		pVal <- pnorm(logratio, fit.mean.fn(logcov, fit.mean.a, fit.mean.b), fit.sd.fn(logcov, fit.sd.a, fit.sd.b))
 	} else {
 		pVal <- pnorm(logratio, 0, logratios.sd[exon.bin])
@@ -213,7 +213,7 @@ write.table(outdf,out.f,sep="\t",quote=F,row.names=F,col.names=T)
 
 #Plotting SD
 #a.sd.fn  	= rep(fit.sd.a, length(logratios.sd.ori))
-#b.sd.fn    	= rep(fit.sd.b, length(logratios.sd.ori)) 
+#b.sd.fn    	= rep(fit.sd.b, length(logratios.sd.ori))
 #sd.after.fit 	= fit.sd.fn(logcov.bins.mean.ori, fit.sd.a, fit.sd.b)
 #sd.out.f 	= paste(outf, "/plot/", sample.name, "sd.data_fit.", bins, "bins.txt", sep="")
 #sd.outdf 	= data.frame(SD.Before.Fit = logratios.sd.ori, Log.Coverage = logcov.bins.mean.ori, SD.After.Fit = sd.after.fit, a.for.fitting=a.sd.fn, b.for.fitting=b.sd.fn)
@@ -223,6 +223,3 @@ write.table(outdf,out.f,sep="\t",quote=F,row.names=F,col.names=T)
 #End of the script
 print ("End of cn_analysis.R")
 print (i)
-
-
-

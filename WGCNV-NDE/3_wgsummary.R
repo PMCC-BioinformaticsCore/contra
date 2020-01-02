@@ -5,7 +5,7 @@
 
 # command line input based on Jason Li's wgcnv_withBAFplot.R
 x=commandArgs()
-args=x[match("--args",x)+1:length(x)] # gets the arguments after --args...? 
+args=x[match("--args",x)+1:length(x)] # gets the arguments after --args...?
 
 scriptPath = args[1]
 f_out = args[4]
@@ -55,7 +55,7 @@ mu = 0.05
 getExonStat = function(exon, ex_av) {
   ex_all_av = data_thresh_exon[exon,]$Cropped.Mean
   ex_all_var = data_thresh_exon[exon,]$Cropped.Var
-  
+
   # Calculate the pval. If log ratio below average use lower tail, otherwise use upper
  # print(exon)
  # print(ex_av)
@@ -66,7 +66,7 @@ getExonStat = function(exon, ex_av) {
     tail = FALSE
   }
   ex_pval = pnorm(ex_av, ex_all_av, sqrt(ex_all_var), lower.tail = tail)
-  
+
   ex_gainloss = "."
   # Is it a gain or a loss? Using significance level of mu
   if (ex_pval < mu) {
@@ -77,10 +77,10 @@ getExonStat = function(exon, ex_av) {
       ex_gainloss = "gain"
     }
   }
-  
-  ex_outdf = data.frame(Exon = exon, Av.LR = ex_av, Overall.Av.LR = ex_all_av, Overall.Var.LR = ex_all_var, 
+
+  ex_outdf = data.frame(Exon = exon, Av.LR = ex_av, Overall.Av.LR = ex_all_av, Overall.Var.LR = ex_all_var,
                         pval = ex_pval, GainLoss = ex_gainloss)
-  
+
   return(ex_outdf)
 
 }
@@ -103,7 +103,7 @@ getGeneStat = function(gene) {
     tail = FALSE
   }
   pval = pnorm(av, all_av, sqrt(all_var), lower.tail = tail)
-  
+
   gainloss = "."
   # Is it a gain or a loss? Using significance level of mu
   if (pval < mu) {
@@ -114,12 +114,12 @@ getGeneStat = function(gene) {
       gainloss = "gain"
     }
   }
-  
-  
+
+
   # Now make it into a data frame and return it
   outdf = data.frame(Gene = gene, Av.LR = av, Overall.Av.LR = all_av, Overall.Var.LR = all_var,
                      pval = pval, GainLoss = gainloss)
-  
+
   # Technically don't have to do this, but do it anyway
   return (outdf)
 }
@@ -137,13 +137,13 @@ for (i in 1:length(exons)) {
 
     exon = paste(ex_row$Gene, "_",ex_row$Chr,":",ex_row$Start.Coord, "_",ex_row$End.Coord, sep = "")
 #    print(exon)
-    
+
     if ( ! is.na( data_thresh_exon[exon,"Cropped.Var"]) ) {
 	    # Get the data
 	    ex_tmpdf = getExonStat(exon, ex_row$Mean.Log.Ratio)
 	    # Want to have column names and not append (ie overwrite) for the first gene
 	    # But for the rest, want to have no column names (already have!) and append (so we dont lose data)
-	    write.table(ex_tmpdf, f_ex_out, col.names = !app, append = app, sep = "\t", 
+	    write.table(ex_tmpdf, f_ex_out, col.names = !app, append = app, sep = "\t",
 			row.names = FALSE, quote = FALSE)
 	    app = TRUE
     }
@@ -153,7 +153,7 @@ for (i in 1:length(exons)) {
 # Now, we want to adjust the pvalues and then overwrite the table with new data
 ex_outdf = read.delim(f_ex_out, as.is = TRUE)
 ex_outdf$adj.pval = p.adjust(ex_outdf$pval, method = "BH")
-write.table(ex_outdf, f_ex_out, col.names = TRUE, append = FALSE, sep = "\t", 
+write.table(ex_outdf, f_ex_out, col.names = TRUE, append = FALSE, sep = "\t",
             row.names = FALSE, quote = FALSE)
 # Then go calculate the adj.GainLoss
 ex_outdf = read.delim(f_ex_out, as.is = TRUE)
@@ -167,7 +167,7 @@ for (i in 1:length(row.names(ex_outdf))) {
     }
   }
 }
-write.table(ex_outdf, f_ex_out, col.names = TRUE, append = FALSE, sep = "\t", 
+write.table(ex_outdf, f_ex_out, col.names = TRUE, append = FALSE, sep = "\t",
             row.names = FALSE, quote = FALSE)
 
 
@@ -183,13 +183,13 @@ for (i in 1:length(genes)) {
   # Check gene actually exists
   #print(is.na(data_wg[gene,]))
   if(is.na(data_wg[gene,]) == FALSE) {
-  
+
     if (! is.na(data_thresh_wg[gene,]$Cropped.Var) ) {
 	    # Get the data
 	    tmpdf = getGeneStat(gene)
 	    # Want to have column names and not append (ie overwrite) for the first gene
 	    # But for the rest, want to have no column names (already have!) and append (so we dont lose data)
-	    write.table(tmpdf, f_out, col.names = !app, append = app, sep = "\t", 
+	    write.table(tmpdf, f_out, col.names = !app, append = app, sep = "\t",
 			row.names = FALSE, quote = FALSE)
 	    app = TRUE
     }
@@ -199,7 +199,7 @@ for (i in 1:length(genes)) {
 # Now, we want to adjust the pvalues and then overwrite the table with new data
 outdf = read.delim(f_out, as.is = TRUE)
 outdf$adj.pval = p.adjust(outdf$pval, method = "BH")
-write.table(outdf, f_out, col.names = TRUE, append = FALSE, sep = "\t", 
+write.table(outdf, f_out, col.names = TRUE, append = FALSE, sep = "\t",
             row.names = FALSE, quote = FALSE)
 
 # Now calculate the exon level information for each gene
@@ -216,15 +216,15 @@ for (i in 1:length(genes)) {
   gene.exons.sig.gain.adj = 0
   gene.exons.sig.loss.adj = 0
   gene.n.exons = 0
-  
+
 print (paste("Processing gene ",i,"out of",length(genes)))
-  
+
   # Go through each exon in f_ex_out
   for (j in 1:length(exons)) {
    # print(genes[i])
-    
+
       tmp_ex_name = ex_outdf[j,]$Exon
-  #print(tmp_ex_name) 
+  #print(tmp_ex_name)
   if (!is.na(tmp_ex_name)) { # why is this even a problem??
   if (tmp_ex_name == genes[i] || grepl(genes[i], tmp_ex_name)) {
       # An exon of the gene
@@ -243,13 +243,13 @@ print (paste("Processing gene ",i,"out of",length(genes)))
     }
   }
 
-  
+
   outdf[i,]$exons.sig.gain = gene.exons.sig.gain
   outdf[i,]$exons.sig.loss = gene.exons.sig.loss
   outdf[i,]$exons.sig.gain.adj = gene.exons.sig.gain.adj
   outdf[i,]$exons.sig.loss.adj = gene.exons.sig.loss.adj
   outdf[i,]$n.exons = gene.n.exons
-  
+
   # adj.GainLoss stuff here
   if (outdf[i,]$adj.pval < mu) {
     if (outdf[i,]$Av.LR < outdf[i,]$Overall.Av.LR) {
@@ -258,10 +258,10 @@ print (paste("Processing gene ",i,"out of",length(genes)))
       outdf[i,]$adj.GainLoss = "gain"
     }
   }
-  
+
 }
 
-write.table(outdf, f_out, col.names = TRUE, append = FALSE, sep = "\t", 
+write.table(outdf, f_out, col.names = TRUE, append = FALSE, sep = "\t",
             row.names = FALSE, quote = FALSE)
 
 
