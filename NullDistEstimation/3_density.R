@@ -5,7 +5,7 @@
 
 # command line input based on Jason Li's wgcnv_withBAFplot.R
 x=commandArgs()
-args=x[match("--args",x)+1:length(x)] # gets the arguments after --args...? 
+args=x[match("--args",x)+1:length(x)] # gets the arguments after --args...?
 
 summaryin= args[1]
 threshout= args[2]
@@ -62,13 +62,13 @@ print(i)
 		# from .75 to 3.5
 		#for (i in 5:175) {
 		#	thresh = i/50
-		
+
 		n.steps=100
 		#num_range = max(numrow) - min(numrow)
 		#num_range_step = num_range/100
-		
+
 		#num_range_step = best_thresh / n.steps
-		
+
 		num_range_step = sd1*2*2 / n.steps
 		for (i2 in 1:n.steps) {
 			thresh = i2 * num_range_step
@@ -94,14 +94,14 @@ print(i)
 			best_p = shapiro.test(numrow[!is.na(numrow)])$p.value
 			best_thresh = max ( max(numrow) - mean, mean - min(numrow))
 		}
-	} 
+	}
 
 	if (hists == 'T' && length(numrow[!is.na(numrow)]) > 1) {
 	  #x11()
-	  plot(density(numrow, na.rm = TRUE), 
+	  plot(density(numrow, na.rm = TRUE),
 		main = rowname,
 		sub = paste("Mean: ", round(mean,4), " || Threshholds:", round(mean-best_thresh,4), round(mean+best_thresh,4)),
-		xlab = paste("Variance:", round(var(numrow, na.rm = TRUE),4), 
+		xlab = paste("Variance:", round(var(numrow, na.rm = TRUE),4),
 			" || Cropped variance: ", round(var(numrow[numrow > mean-best_thresh & numrow < mean+best_thresh], na.rm = TRUE),4)
 			)
 	  )
@@ -136,10 +136,10 @@ dataout = data.frame(rownames, means, vars, left_threshs, right_threshs, cropped
 colnames(dataout) <- c("Gene Name", "Mean(trimmed 0.2)", "Variance", "Left Thresh", "Right Thresh",
 					"Cropped Mean", "Cropped Var")
 
-write.table(dataout, threshout, quote = FALSE, sep = '\t', 
+write.table(dataout, threshout, quote = FALSE, sep = '\t',
 	row.names = FALSE, col.names = TRUE)
 
-if (hists == 'T') { 
+if (hists == 'T') {
   dev.off()
 }
 
