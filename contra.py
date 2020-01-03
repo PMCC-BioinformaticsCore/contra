@@ -109,6 +109,7 @@ class Params:
             type=int,
             default=10,
         )
+        # TODO: change this to a choice argument with sam/bed
         self.optional.add_argument(
             "--sam",
             help="If the specified, test and control sample are in SAM [False]",
