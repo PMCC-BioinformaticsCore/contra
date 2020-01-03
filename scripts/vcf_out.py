@@ -17,48 +17,50 @@
 #    You should have received a copy of the GNU General Public License
 #    along with CONTRA.  If not, see <http://www.gnu.org/licenses/>.
 #
-# 
-#-----------------------------------------------------------------------#
+#
+# -----------------------------------------------------------------------#
 # Last Updated : 09 Apr 2011 11:00AM
 
+
 def vcf_out(inF, outF):
-	import math
-	f = file.readlines(open(inF))
-	vcf = open(outF, "w")
+    import math
 
-	#header
-	vcf.write("##fileformat=VCFv4.0\n")
-	vcf.write("##reference=1000GenomesPilot-NCBI36\n")
-	vcf.write('##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variant"\n')
-	vcf.write('##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the variant described in this record"\n')
-	vcf.write('##ALT=<ID=CNV,Description="Copy number variable region"\n')
-	vcf.write("#CHROM \tPOS \tID \tREF \tALT \tQUAL \tFILTER \tINFO\n")
+    f = file.readlines(open(inF))
+    vcf = open(outF, "w")
 
-	count = 0 
-	while count < len(f):
-		if (count % 2 == 0):
-			region = f[count].strip(">\n")
-			region = region.split(":")
-			chr = region[0]
+    # header
+    vcf.write("##fileformat=VCFv4.0\n")
+    vcf.write("##reference=1000GenomesPilot-NCBI36\n")
+    vcf.write(
+        '##INFO=<ID=SVTYPE,Number=1,Type=String,Description="Type of structural variant"\n'
+    )
+    vcf.write(
+        '##INFO=<ID=END,Number=1,Type=Integer,Description="End position of the variant described in this record"\n'
+    )
+    vcf.write('##ALT=<ID=CNV,Description="Copy number variable region"\n')
+    vcf.write("#CHROM \tPOS \tID \tREF \tALT \tQUAL \tFILTER \tINFO\n")
 
-			adjPVal = float(region[2])
-			if adjPVal <= 0:
-				adjPVal = 0
-			else:
-				adjPVal = -10 * math.log(adjPVal, 10)
-			adjPVal = str(round(adjPVal,3))		
-			region[1] = region[1].split("-")
-			start = region[1][0]
-			end = region[1][1]
-		else:
-			ref = f[count].strip("\n")
-			vcf.write(chr +"\t"+ start + "\t" + "." + "\t" + ref + "\t")
-			vcf.write("<CNV>" + "\t" + adjPVal + "\t" + "PASS" + "\t")
-			vcf.write("SVTYPE=CNV;END="+ end + "\n")
-		count += 1		
+    count = 0
+    while count < len(f):
+        if count % 2 == 0:
+            region = f[count].strip(">\n")
+            region = region.split(":")
+            chr = region[0]
 
-	vcf.close()
-	
+            adjPVal = float(region[2])
+            if adjPVal <= 0:
+                adjPVal = 0
+            else:
+                adjPVal = -10 * math.log(adjPVal, 10)
+            adjPVal = str(round(adjPVal, 3))
+            region[1] = region[1].split("-")
+            start = region[1][0]
+            end = region[1][1]
+        else:
+            ref = f[count].strip("\n")
+            vcf.write(chr + "\t" + start + "\t" + "." + "\t" + ref + "\t")
+            vcf.write("<CNV>" + "\t" + adjPVal + "\t" + "PASS" + "\t")
+            vcf.write("SVTYPE=CNV;END=" + end + "\n")
+        count += 1
 
-
-
+    vcf.close()

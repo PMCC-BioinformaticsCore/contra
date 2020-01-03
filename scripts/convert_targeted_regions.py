@@ -17,55 +17,56 @@
 #    You should have received a copy of the GNU General Public License
 #    along with CONTRA.  If not, see <http://www.gnu.org/licenses/>.
 #
-# 
-#-----------------------------------------------------------------------#
+#
+# -----------------------------------------------------------------------#
 # Last Updated : 28 Mar 2011 11:00AM
 
+
 class Target:
-	"""
+    """
 	Class for target regions
 	"""
-	
-	population = 0
 
-	def __init__(self):
-		self.id = 0
-		self.gene = "unknown"
-		self.chr = "chr1"
-		self.start = 0
-		self.end = 0
-		self.numberExon = 0
-		self.oriStart = 0
-		self.oriEnd = 0
+    population = 0
+
+    def __init__(self):
+        self.id = 0
+        self.gene = "unknown"
+        self.chr = "chr1"
+        self.start = 0
+        self.end = 0
+        self.numberExon = 0
+        self.oriStart = 0
+        self.oriEnd = 0
+
 
 def convertTarget(target):
-	targets = open(target)
+    targets = open(target)
 
-	targetList = []
+    targetList = []
 
-	count = 0
-	for region in targets:
-		region = region.split()
-		chr = "chr" + region[0].strip("chr")
-		start = region[1]
-		end = region[2]
-		try:
-			gene = region[3]
-		except:
-			gene = "unknown"	
-		count += 1
+    count = 0
+    for region in targets:
+        region = region.split()
+        chr = "chr" + region[0].strip("chr")
+        start = region[1]
+        end = region[2]
+        try:
+            gene = region[3]
+        except:
+            gene = "unknown"
+        count += 1
 
-		aTarget = Target()
-		aTarget.id = count
-		aTarget.gene = gene
-		aTarget.chr  = chr
-		aTarget.start = start
-		aTarget.end = end
-		aTarget.numberExon = 1
-		aTarget.oriStart = start
-		aTarget.oriEnd	 = end
+        aTarget = Target()
+        aTarget.id = count
+        aTarget.gene = gene
+        aTarget.chr = chr
+        aTarget.start = start
+        aTarget.end = end
+        aTarget.numberExon = 1
+        aTarget.oriStart = start
+        aTarget.oriEnd = end
 
-		targetList.append(aTarget)
+        targetList.append(aTarget)
 
-
-	return targetList
+    return targetList

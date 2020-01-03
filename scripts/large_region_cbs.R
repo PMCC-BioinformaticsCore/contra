@@ -17,7 +17,7 @@
 #    You should have received a copy of the GNU General Public License
 #    along with CONTRA.  If not, see <http://www.gnu.org/licenses/>.
 #
-# 
+#
 #-----------------------------------------------------------------------#
 # Last Updated : 12 October 2011 16:43PM
 
@@ -73,7 +73,7 @@ for (i in kmax.range){
 		cna.start.coord = dat[dat$Targeted.Region.ID==(cna.start.id),]$OriStCoordinate
 		cna.end.coord	= dat[dat$Targeted.Region.ID==(cna.end.id), ]$OriEndCoordinate
 
-		dat.inrange 		= dat[dat$Targeted.Region.ID<=cna.end.id&dat$Targeted.Region.ID>=cna.start.id,]	
+		dat.inrange 		= dat[dat$Targeted.Region.ID<=cna.end.id&dat$Targeted.Region.ID>=cna.start.id,]
 		cna.segment.logratios 	= dat.inrange$Adjusted.Mean.of.LogRatio
 		cna.segment.pvalues   	= dat.inrange$Adjusted.P.Value
 		segment.pvals.above	= dat.inrange[dat.inrange$Adjusted.P.Value<=param.pval.cutoff,]$Adjusted.P.Value
@@ -97,7 +97,7 @@ for (i in kmax.range){
 				cna.segment.calls = c(cna.segment.calls, "CNV")
 			}
 		}
-	}	
+	}
 
 
 	outdf = data.frame(Chr=cna.segment.out$chrom, Target.Start=cna.segment.out$loc.start, Target.End=cna.segment.out$loc.end, NumberOfTargets=cna.segment.out$num.mark, OriStCoordinate=cna.segment.start, OriEndCoordinate=cna.segment.end, CBS.Mean = cna.segment.out$seg.mean, LogRatios = cna.segment.mean, Above.PValues.Cutoff=cna.segment.pvals.size, Calls = cna.segment.calls)
@@ -123,11 +123,11 @@ for (i in 1:nrow(small.call)){
         start.small     = small.segment$Target.Start
         end.small       = small.segment$Target.End
         match.large.nocall = large.nocall[large.nocall$Chr==chr.small,]
-        
-        match.large.nocall = match.large.nocall[match.large.nocall$Target.End>=start.small,]    
-        match.large.nocall = match.large.nocall[match.large.nocall$Target.Start<=start.small,]   
+
+        match.large.nocall = match.large.nocall[match.large.nocall$Target.End>=start.small,]
+        match.large.nocall = match.large.nocall[match.large.nocall$Target.Start<=start.small,]
         merged.hole        = match.large.nocall[match.large.nocall$Target.End>=start.small,]
-        
+
         if (nrow(merged.hole) > 0){
                 included.segment = merge(included.segment, small.segment, all=T)
         }
@@ -135,16 +135,3 @@ for (i in 1:nrow(small.call)){
 
 out.f = paste(logcov.file, ".LargeDeletion.txt", sep="")
 write.table(included.segment, out.f, sep="\t", quote=F, row.names=F)
-
-
-
-
-
-
-
-
-
-
-
-
-
