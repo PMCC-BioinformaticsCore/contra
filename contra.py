@@ -94,6 +94,7 @@ class Params:
         self.optional.add_argument(
             "--numBin",
             help="Numbers of bins to group regions. User can specify multiple experiments with different number of bins (comma separated) [20]",
+            type=int,
             default="20",
         )
         self.optional.add_argument(

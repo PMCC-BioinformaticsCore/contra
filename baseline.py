@@ -7,7 +7,7 @@ import shlex
 import subprocess
 import shutil
 import math
-from optparse import OptionParser
+import argparse
 from scripts.split_chromosome import splitByChromosome3 as splitByChromosome
 from scripts.get_chr_length import *
 from scripts.convert_targeted_regions import *
@@ -23,58 +23,41 @@ class Params:
 	"""
 
     def __init__(self):
-        def mult_files(option, opt_str, value, parser):
-            args = []
-            for arg in parser.rargs:
-                if arg[0] != "-":
-                    args.append(arg)
-                else:
-                    del parser.rargs[: len(args)]
-                    break
-            if getattr(parser.values, option.dest):
-                args.extend(getattr(parser.values, option.dest))
-            setattr(parser.values, option.dest, args)
 
         # command-line option definition
-        self.parser = OptionParser()
-        self.parser.add_option(
+        self.parser = argparse.ArgumentParser()
+        self.parser.add_argument(
             "-t",
             "--target",
             help="Target region definition file [REQUIRED] [BED Format]",
-            action="store",
-            type="string",
-            dest="target",
+            required=True,
         )
-        self.parser.add_option(
+        self.parser.add_argument(
             "-f",
             "--files",
             help="Files to be converted to baselines [REQUIRED] [BAM]",
-            action="callback",
-            callback=mult_files,
+            nargs="+",
             dest="files",
+            required=True,
         )
-        self.parser.add_option(
+        self.parser.add_argument(
             "-o",
             "--output",
             help="Output folder [REQUIRED]",
-            action="store",
-            type="string",
             dest="output",
+            required=True,
         )
-        self.parser.add_option(
+        self.parser.add_argument(
             "-c",
             "--trim",
             help="Portion of outliers to be removed before calculating average [Default: 0.2]",
-            action="store",
-            dest="trim",
-            default="0.2",
+            type=float,
+            default=0.2,
         )
-        self.parser.add_option(
+        self.parser.add_argument(
             "-n",
             "--name",
             help="Output baseline name [Default: baseline]",
-            action="store",
-            dest="name",
             default="baseline",
         )
 
@@ -82,13 +65,20 @@ class Params:
         self.ERRORLIST = []
 
         # change system parameters based on any command line arguments
-        (options, args) = self.parser.parse_args()
+        options = self.parser.parse_args()
         if options.target:
+            if not os.path.isfile(options.target):
+                print(f"Could not find bed file {options.target}")
+                self.ERRORLIST.append("control")
             self.TARGET = options.target
         else:
             self.ERRORLIST.append("target")
 
         if options.files:
+            for bam in options.files:
+                if not os.path.isfile(options.target):
+                    print(f"Could not find bam file {bam}")
+                    self.ERRORLIST.append("files")
             self.FILES = options.files
         else:
             self.ERRORLIST.append("files")
@@ -98,23 +88,17 @@ class Params:
         else:
             self.ERRORLIST.append("output")
 
-        if options.trim:
-            self.TRIM = float(options.trim)
-
-        if options.name:
-            self.NAME = options.name
-
         if len(self.ERRORLIST) != 0:
-            self.parser.print_help()
-            self.parser.error("Missing required parameters")
+            # self.parser.print_help()
+            self.parser.error("Missing required parameters: " + str(self.ERRORLIST))
 
     def repeat(self):
         # params test
-        print(f"target	: {self.TARGET}")
-        print(f"files	: {self.FILES}")
-        print(f"output	: {self.OUTPUT}")
-        print(f"trim	: {self.TRIM}")
-        print(f"name	: {self.NAME}")
+        print(f"target  :{self.TARGET}")
+        print(f"files   :{self.FILES}")
+        print(f"output  :{self.OUTPUT}")
+        print(f"trim    :{self.TRIM}")
+        print(f"name    :{self.NAME}")
 
 
 # option handling
