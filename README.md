@@ -15,7 +15,6 @@ http://contra-cnv.sourceforge.net/
 v2.1.0
 Uses python3
 Improved performance through multithreading and restructuring of loops
-Autodetection of file formats (work in progress)
 
 v2.0.8
 Included NDE and WGCNV workflows.
