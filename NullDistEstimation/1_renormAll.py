@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # Usage: "python 1_renormAll.py %s %s %s %s" % (contraList, renormPath, renormList, debug)
 
 import math

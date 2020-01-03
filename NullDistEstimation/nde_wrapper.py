@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 # 24/09 wrapper script for estimating the null distribution
 # on a per exon and per gene basis from a bunch of CONTRA outputs

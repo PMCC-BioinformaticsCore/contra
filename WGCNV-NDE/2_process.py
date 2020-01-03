@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # Usage: python 2_process.py [_renorm.txt] [_wg.txt] [_exon.txt] [bed.annotated.txt] [debug]
 import os
 import copy

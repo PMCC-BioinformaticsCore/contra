@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 # 10/10  wrapper script for WGCNV - server edit
 # based on wgcnv_noBAF.py by Jason Li
