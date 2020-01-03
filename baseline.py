@@ -128,7 +128,7 @@ outdir = os.path.join(output_dir, "buf")
 make_new_directory(outdir)
 
 targetFile2 = os.path.join(outdir, os.path.basename(targetFile) + ".sorted")
-os.system("sort -k1,1 -k2n %s > %s" % (targetFile, targetFile2))
+os.system(f"sort -k1,1 -k2n {targetFile} > {targetFile2}")
 
 
 def processInFile(infile):
@@ -139,7 +139,7 @@ def processInFile(infile):
     get_genome(infile, genomeFile)
 
     bedgraph = os.path.join(s_outdir, infilename + ".BEDGRAPH")
-    args = shlex.split("genomeCoverageBed -ibam %s -bga -g %s" % (infile, genomeFile))
+    args = shlex.split(f"genomeCoverageBed -ibam {infile} -bga -g {genomeFile}")
     iOutFile = open(bedgraph, "w")
     output = subprocess.Popen(args, stdout=iOutFile).wait()
     iOutFile.close()
